@@ -5,8 +5,6 @@ import java.util.Calendar;
 
 import javax.persistence.*;
 
-import sun.net.www.content.audio.basic;
-
 @Entity
 @Table(name = "paciente")
 public class Paciente {

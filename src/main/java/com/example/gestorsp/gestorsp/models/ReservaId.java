@@ -1,6 +1,6 @@
 package com.example.gestorsp.gestorsp.models;
 import java.io.Serializable;
-import java.sql.Timestamp;
+import java.util.Date;
 import java.util.Objects;
 
 import javax.persistence.*;
@@ -10,21 +10,23 @@ public class ReservaId implements Serializable {
     private static final long serialVersionUID = 1L;
     @Column(name="horarioId")
     @Temporal(TemporalType.TIMESTAMP)
-    private Timestamp horario;
-    @Column(name="sillonId")
-    private Long sillonid;
+    private Date horario;
+    @ManyToOne
+    //@MapsId("numero_sillon")
+    //@JoinColumn(name="numero_sillon",referencedColumnName = "numero_sillon")
+    private Sillon sillon;
 
 
-    public void setSillonid(Long sillonid) {
-        this.sillonid = sillonid;
+    public void setSillon(Sillon sillonid) {
+        this.sillon = sillonid;
     }
-    public Long getSillonid() {
-        return sillonid;
+    public Sillon getSillon() {
+        return sillon;
     }
-    public void setHorario(Timestamp horario) {
+    public void setHorario(Date horario) {
         this.horario = horario;
     }
-    public Timestamp getHorario() {
+    public Date getHorario() {
         return horario;
     }
 
@@ -32,9 +34,9 @@ public class ReservaId implements Serializable {
     
     }
 
-    public ReservaId(Long sillon,Timestamp horario){
+    public ReservaId(Sillon sillon,Date horario){
         this.horario=horario;
-        this.sillonid=sillon;
+        this.sillon=sillon;
     }
 
     @Override
@@ -44,14 +46,14 @@ public class ReservaId implements Serializable {
         Reserva that = (Reserva) o;
         return 
                 Objects.equals(getHorario(), that.getHorario()) &&
-                Objects.equals(getSillonid(), that.getSillonid());
+                Objects.equals(getSillon(), that.getSillon());
     }
  
     @Override
     public int hashCode() {
         return Objects.hash(
             getHorario(),
-            getSillonid());
+            getSillon());
     }
 
 }
