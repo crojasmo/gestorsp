@@ -1,5 +1,7 @@
 package com.example.gestorsp.gestorsp.models;
 
+import java.sql.Timestamp;
+
 import javax.persistence.*;
 
 @Entity
@@ -7,19 +9,21 @@ import javax.persistence.*;
 public class Reserva {
     @EmbeddedId
     private ReservaId reservaId;
-    @ManytoOne
+    @ManyToOne
     @MapsId("numero_sillon")
     @JoinColumn(name="numero_sillon",referencedColumnName = "numero_sillon")
     Sillon sillon;
     //Agregar Paciente
 
-    public void setSillon(Sillon sillon) {
+    public void setSillonid(Long sillon) {
         this.reservaId.setSillonid(sillon);
     }
-    public Long getSillon(){
+    public Long getSillonid(){
         return this.reservaId.getSillonid();
     }
-
+    public Timestamp getHorario(){
+        return this.reservaId.getHorario();
+    }
     public void setReservaId(ReservaId reservaId) {
         this.reservaId = reservaId;
     }
@@ -29,6 +33,7 @@ public class Reserva {
     public Reserva(ReservaId reservaid){
         this.reservaId=reservaid;
     }
+   
     public Reserva(){
 
     }

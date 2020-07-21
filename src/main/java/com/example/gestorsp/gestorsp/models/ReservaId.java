@@ -12,13 +12,13 @@ public class ReservaId implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Timestamp horario;
     @Column(name="sillonId")
-    private Sillon sillonid;
+    private Long sillonid;
 
 
-    public void setSillonid(Sillon sillonid) {
+    public void setSillonid(Long sillonid) {
         this.sillonid = sillonid;
     }
-    public Sillon getSillonid() {
+    public Long getSillonid() {
         return sillonid;
     }
     public void setHorario(Timestamp horario) {
@@ -32,7 +32,7 @@ public class ReservaId implements Serializable {
     
     }
 
-    public ReservaId(Sillon sillon,Timestamp horario){
+    public ReservaId(Long sillon,Timestamp horario){
         this.horario=horario;
         this.sillonid=sillon;
     }
