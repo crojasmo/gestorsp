@@ -1,6 +1,8 @@
 package com.example.gestorsp.gestorsp.models;
 
 
+import java.util.Date;
+
 import javax.persistence.*;
 
 @Entity
@@ -12,7 +14,8 @@ public class Sillon {
     private String estado;
     private boolean activo;
     private Long numero_sala;
-
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date Fecha_retirado;
     public Sillon(){
 
     }
@@ -49,5 +52,12 @@ public class Sillon {
         return numero_sala;
     }
 
+    public void setFecha_retirado(Date fecha_retirado) {
+        Fecha_retirado = fecha_retirado;
+    }
+    public Date getFecha_retirado() {
+        return Fecha_retirado;
+    }
+    
     
 }
