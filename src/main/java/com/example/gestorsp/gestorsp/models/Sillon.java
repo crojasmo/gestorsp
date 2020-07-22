@@ -7,6 +7,7 @@ import javax.persistence.*;
 @Table(name = "sillon")
 public class Sillon {
     @Id
+    @GeneratedValue
     private Long numero_sillon;
     private String estado;
     private boolean activo;

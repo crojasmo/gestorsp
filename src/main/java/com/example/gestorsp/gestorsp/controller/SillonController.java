@@ -5,9 +5,13 @@ import com.example.gestorsp.gestorsp.repository.SillonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.gestorsp.gestorsp.exceptions.ResourceNotFoundException;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 
 @RestController
@@ -26,6 +30,31 @@ public class SillonController {
             return sillonRepository.save(sillon);
         }).orElseThrow(()-> new ResourceNotFoundException("Sillon not found with id " + sillonId));
     }
-    
+    @PostMapping("/sillones")
+    public Sillon createSillon(@Validated @RequestBody Sillon sillon_n) {
+        Sillon newSillon=sillonRepository.save(sillon_n);
+        return newSillon;
+    }
 
-}
+    @PutMapping("/sillones/{sillonId}")
+    public Sillon sillonUpdate(@PathVariable Long sillonId,@Validated @RequestBody Sillon sillonRequest){
+        return sillonRepository.findById(sillonId)
+            .map(sillon -> {
+                sillon.setActivo(sillonRequest.getActivo());
+                sillon.setEstado(sillonRequest.getEstado());
+                sillon.setNumero_sala(sillonRequest.getNumero_sala());
+                sillon.setNumero_sillon(sillonRepository.findById(sillonId).get().getNumero_sillon());
+                return sillonRepository.save(sillon);
+            }).orElseThrow(() -> new ResourceNotFoundException("Sillon no encontrado con id: " + sillonId));
+    }
+    @PutMapping("/sillones/{sillonId}/delete")
+    public Sillon sillonDelete(@PathVariable Long sillonId){
+        return sillonRepository.findById(sillonId)
+            .map(sillon -> {
+                sillon.setActivo(false);
+                sillon.setEstado("No disponible");
+                return sillonRepository.save(sillon);
+            }).orElseThrow(() -> new ResourceNotFoundException("Sillon no encontrado con id: " + sillonId));
+    }
+    }
+    
