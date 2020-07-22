@@ -10,9 +10,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Iterator;
 
-import com.example.gestorsp.gestorsp.exceptions.ResourceNotFoundException;
+import com.example.gestorsp.gestorsp.exceptions.*;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -25,31 +24,11 @@ public class SillonController {
 
     @GetMapping("/sillones")
     public Iterable<Sillon> getSillon(Pageable pageable){
-        Iterable<Sillon> lista_completa=sillonRepository.findAll();
-        Iterator i=lista_completa.iterator();
-        boolean act=true;
-        while (i.hasNext()) {
-            Sillon sillon_n=(Sillon)i.next();
-            act=sillon_n.getActivo();
-            if (act==false) {
-                i.remove();
-            }
-        }
-        return lista_completa;   
+        return sillonRepository.findByActivo(true);
     }
     @GetMapping("/sillones/eliminados")
     public Iterable<Sillon> getSillonEliminado(Pageable pageable){
-        Iterable<Sillon> lista_completa=sillonRepository.findAll();
-        Iterator i=lista_completa.iterator();
-        boolean act=true;
-        while (i.hasNext()) {
-            Sillon sillon_n=(Sillon)i.next();
-            act=sillon_n.getActivo();
-            if (act==true) {
-                i.remove();
-            }
-        }
-        return lista_completa;   
+        return sillonRepository.findByActivo(false);  
     }
     @GetMapping("/sillones/completa")
     public Iterable<Sillon> getSillonCompleto(Pageable pageable){
@@ -79,8 +58,13 @@ public class SillonController {
                 return sillonRepository.save(sillon);
             }).orElseThrow(() -> new ResourceNotFoundException("Sillon no encontrado con id: " + sillonId));
     }
+
+
     @PutMapping("/sillones/{sillonId}/delete")
     public Sillon sillonDelete(@PathVariable Long sillonId){
+        if (sillonRepository.findById(sillonId).get().getActivo()==false){
+            throw new DeletedException("Sillon con la id: "+ sillonId +" ya eliminado");
+        }
         return sillonRepository.findById(sillonId)
             .map(sillon -> {
                 sillon.setActivo(false);
