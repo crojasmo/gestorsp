@@ -2,7 +2,7 @@ package com.example.gestorsp.gestorsp.exceptions;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-//@ResponseStatus(HttpStatus)
+@ResponseStatus(HttpStatus.BAD_REQUEST)
 public class CreateException extends RuntimeException{
     /**
      *
