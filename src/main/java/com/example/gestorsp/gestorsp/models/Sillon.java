@@ -10,34 +10,34 @@ import javax.persistence.*;
 public class Sillon {
     @Id
     @GeneratedValue
-    private Long numero_sillon;
+    private Long id;
+    private String numero_sillon;
     private String estado;
     private boolean activo;
     private Long numero_sala;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date Fecha_update;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date Fecha_creacion;
     @Temporal(TemporalType.TIMESTAMP)
     private Date Fecha_retirado;
     public Sillon(){
 
     }
 
-    public Sillon (Long numero_sillon){
+
+    public Sillon (String numero_sillon){
         this.numero_sillon=numero_sillon;
     }
-    public Sillon (Long numero_sillon, Long numero_sala){
+    public Sillon (String numero_sillon, Long numero_sala){
         this.numero_sillon=numero_sillon;
         this.numero_sala=numero_sala;
     }
-    public void setNumero_sillon(Long numero_sillon) {
+    public void setNumero_sillon(String numero_sillon) {
         this.numero_sillon = numero_sillon;
     }
-    public Long getNumero_sillon() {
+    public String getNumero_sillon() {
         return numero_sillon;
-    }
-    public void setActivo(boolean activo) {
-        this.activo = activo;
-    }
-    public boolean getActivo(){
-        return activo;
     }
     public String getEstado() {
         return estado;
@@ -52,11 +52,35 @@ public class Sillon {
         return numero_sala;
     }
 
+    public void setActivo(boolean activo) {
+        this.activo = activo;
+    }
+    public boolean getActivo(){
+        return this.activo;
+    }
+    public Date getFecha_creacion() {
+        return Fecha_creacion;
+    }
+    public void setFecha_creacion(Date fecha_creacion) {
+        Fecha_creacion = fecha_creacion;
+    }
+    public Date getFecha_update() {
+        return Fecha_update;
+    }
+    public void setFecha_update(Date fecha_update) {
+        Fecha_update = fecha_update;
+    }
     public void setFecha_retirado(Date fecha_retirado) {
         Fecha_retirado = fecha_retirado;
     }
     public Date getFecha_retirado() {
         return Fecha_retirado;
+    }
+    public Long getId() {
+        return id;
+    }
+    public void setId(Long id) {
+        this.id = id;
     }
     
     

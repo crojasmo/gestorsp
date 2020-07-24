@@ -2,6 +2,8 @@ package com.example.gestorsp.gestorsp.controller;
 
 import com.example.gestorsp.gestorsp.models.Sillon;
 import com.example.gestorsp.gestorsp.repository.SillonRepository;
+import com.example.gestorsp.gestorsp.models.SillonEliminado;
+import com.example.gestorsp.gestorsp.repository.SillonEliminadoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +23,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class SillonController {
     @Autowired
     private SillonRepository sillonRepository;
-
+    @Autowired
+    private SillonEliminadoRepository sillonEliminadoRepository;
     @GetMapping("/sillones")
     public Iterable<Sillon> getSillon(Pageable pageable){
         return sillonRepository.findByActivo(true);
@@ -43,6 +46,9 @@ public class SillonController {
     }
     @PostMapping("/sillones")
     public Sillon createSillon(@Validated @RequestBody Sillon sillon_n) {
+        SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd");
+        Date fecha_hora=new Date();
+        sillon_n.setFecha_creacion(fecha_hora);
         Sillon newSillon=sillonRepository.save(sillon_n);
         return newSillon;
     }
@@ -54,13 +60,17 @@ public class SillonController {
                 sillon.setActivo(sillonRequest.getActivo());
                 sillon.setEstado(sillonRequest.getEstado());
                 sillon.setNumero_sala(sillonRequest.getNumero_sala());
-                sillon.setNumero_sillon(sillonRepository.findById(sillonId).get().getNumero_sillon());
+                sillon.setNumero_sillon(sillonRequest.getNumero_sillon());
+                SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd");
+                Date fecha_hora=new Date();
+                sillon.setFecha_update(fecha_hora);
+
                 return sillonRepository.save(sillon);
             }).orElseThrow(() -> new ResourceNotFoundException("Sillon no encontrado con id: " + sillonId));
     }
 
 
-    @PutMapping("/sillones/{sillonId}/delete")
+    @DeleteMapping("/sillones/{sillonId}/delete")
     public Sillon sillonDelete(@PathVariable Long sillonId){
         if (sillonRepository.findById(sillonId).get().getActivo()==false){
             throw new DeletedException("Sillon con la id: "+ sillonId +" ya eliminado");
@@ -72,8 +82,25 @@ public class SillonController {
                 SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd");
                 Date fecha_hora=new Date();
                 sillon.setFecha_retirado(fecha_hora);
+                sillonEliminadoCrear(sillon);
                 return sillonRepository.save(sillon);
             }).orElseThrow(() -> new ResourceNotFoundException("Sillon no encontrado con id: " + sillonId));
+    }
+    public SillonEliminado sillonEliminadoCrear(Sillon sillon){
+        Long id=sillon.getId();
+        String numero_sillon=sillon.getNumero_sillon();
+        Date fecha_creacion=sillon.getFecha_creacion();
+        SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd");
+        Date fecha_eliminacion=new Date();
+        String motivo="";
+        SillonEliminado sillon_eliminado= new SillonEliminado();
+        sillon_eliminado.setId_original_sillon(id);
+        sillon_eliminado.setFecha_creacion(fecha_creacion);
+        sillon_eliminado.setFecha_eliminacion(fecha_eliminacion);
+        sillon_eliminado.setNumero_sillon(numero_sillon);
+        sillon_eliminado.setMotivo(motivo);
+        return sillonEliminadoRepository.save(sillon_eliminado);
+
     }
     }
     
