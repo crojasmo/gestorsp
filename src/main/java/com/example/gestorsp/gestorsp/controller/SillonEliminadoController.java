@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class SillonEliminadoController {
     @Autowired
     private SillonEliminadoRepository sillonEliminadoRepository;
-    @GetMapping("/sillones")
+    @GetMapping("/silloneseliminados")
     public Iterable<SillonEliminado> getSillonEliminado(Pageable pageable){
         return sillonEliminadoRepository.findAll();
     }
