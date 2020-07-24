@@ -46,9 +46,7 @@ public class SillonController {
     }
     @PostMapping("/sillones")
     public Sillon createSillon(@Validated @RequestBody Sillon sillon_n) {
-        SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd");
-        Date fecha_hora=new Date();
-        sillon_n.setFecha_creacion(fecha_hora);
+     
         Sillon newSillon=sillonRepository.save(sillon_n);
         return newSillon;
     }
