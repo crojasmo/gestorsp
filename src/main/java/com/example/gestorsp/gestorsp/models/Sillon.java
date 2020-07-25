@@ -12,7 +12,6 @@ public class Sillon {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String numero_sillon;
-    private String estado;
     private boolean activo;
     private Long numero_sala;
     @Temporal(TemporalType.TIMESTAMP)
@@ -38,12 +37,6 @@ public class Sillon {
     }
     public String getNumero_sillon() {
         return numero_sillon;
-    }
-    public String getEstado() {
-        return estado;
-    }
-    public void setEstado(String estado) {
-        this.estado = estado;
     }
     public void setNumero_sala(Long numero_sala) {
         this.numero_sala = numero_sala;

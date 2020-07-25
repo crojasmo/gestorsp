@@ -58,7 +58,6 @@ public class SillonController {
         return sillonRepository.findById(sillonId)
             .map(sillon -> {
                 sillon.setActivo(sillonRequest.getActivo());
-                sillon.setEstado(sillonRequest.getEstado());
                 sillon.setNumero_sala(sillonRequest.getNumero_sala());
                 sillon.setNumero_sillon(sillonRequest.getNumero_sillon());
                 SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd");
@@ -78,7 +77,6 @@ public class SillonController {
         return sillonRepository.findById(sillonId)
             .map(sillon -> {
                 sillon.setActivo(false);
-                sillon.setEstado("No disponible");
                 SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd");
                 Date fecha_hora=new Date();
                 sillon.setFecha_retirado(fecha_hora);
