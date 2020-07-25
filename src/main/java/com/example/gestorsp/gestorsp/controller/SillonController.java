@@ -26,6 +26,7 @@ public class SillonController {
     private SillonRepository sillonRepository;
     @Autowired
     private SillonEliminadoRepository sillonEliminadoRepository;
+    SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd");
     @GetMapping("/sillones")
     public Iterable<Sillon> getSillon(Pageable pageable){
         return sillonRepository.findByActivo(true);
@@ -41,13 +42,18 @@ public class SillonController {
 
     @GetMapping("/sillones/{sillonId}")
     public Sillon getSillonDetalle(Pageable pageable,@PathVariable Long sillonId){
-        return sillonRepository.findById(sillonId).map(sillon->{
-            return sillonRepository.save(sillon);
-        }).orElseThrow(()-> new ResourceNotFoundException("Sillon not found with id " + sillonId));
+        if (sillonRepository.findById(sillonId).get().getActivo()==false) {
+            throw new DeletedException("Sillon con la id: "+ sillonId +" ya eliminado");
+        } 
+        else {
+            return sillonRepository.findById(sillonId).map(sillon->{
+                return sillonRepository.save(sillon);
+            }).orElseThrow(()-> new ResourceNotFoundException("Sillon not found with id " + sillonId));
+        }
+        
     }
     @PostMapping("/sillones")
     public Sillon createSillon(@Validated @RequestBody Sillon sillon_n) {
-        SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd");
         Date fecha_hora=new Date();
         sillon_n.setFecha_creacion(fecha_hora);
         Sillon newSillon=sillonRepository.save(sillon_n);
@@ -61,7 +67,6 @@ public class SillonController {
                 sillon.setActivo(sillonRequest.getActivo());
                 sillon.setNumero_sala(sillonRequest.getNumero_sala());
                 sillon.setNumero_sillon(sillonRequest.getNumero_sillon());
-                SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd");
                 Date fecha_hora=new Date();
                 sillon.setFecha_update(fecha_hora);
 
@@ -78,7 +83,6 @@ public class SillonController {
         return sillonRepository.findById(sillonId)
             .map(sillon -> {
                 sillon.setActivo(false);
-                SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd");
                 Date fecha_hora=new Date();
                 sillon.setFecha_retirado(fecha_hora);
                 sillonEliminadoCrear(sillon,motivo.getMotivo());
@@ -89,7 +93,6 @@ public class SillonController {
         Long id=sillon.getId();
         String numero_sillon=sillon.getNumero_sillon();
         Date fecha_creacion=sillon.getFecha_creacion();
-        SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd");
         Date fecha_eliminacion=new Date();
         SillonEliminado sillon_eliminado= new SillonEliminado();
         sillon_eliminado.setId_original_sillon(id);
