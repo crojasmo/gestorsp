@@ -70,7 +70,7 @@ public class SillonController {
 
 
     @DeleteMapping("/sillones/{sillonId}/delete")
-    public Sillon sillonDelete(@PathVariable Long sillonId,@Validated @RequestBody String motivo){
+    public Sillon sillonDelete(@PathVariable Long sillonId,@RequestBody String motivo){
         if (sillonRepository.findById(sillonId).get().getActivo()==false){
             throw new DeletedException("Sillon con la id: "+ sillonId +" ya eliminado");
         }
