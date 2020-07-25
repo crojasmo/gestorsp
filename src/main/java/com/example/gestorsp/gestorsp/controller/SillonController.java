@@ -42,9 +42,7 @@ public class SillonController {
 
     @GetMapping("/sillones/{sillonId}")
     public Sillon getSillonDetalle(Pageable pageable,@PathVariable Long sillonId){
-        if (sillonRepository.findById(sillonId).get().getActivo()==false) {
-            throw new DeletedException("Ese sillon ya fue eliminado");
-        } 
+            revisarEliminado(sillonId);
             return sillonRepository.findById(sillonId).map(sillon->{
                 return sillonRepository.save(sillon);
             }).orElseThrow(()-> new ResourceNotFoundException("Sillon not found with id " + sillonId));
@@ -101,6 +99,11 @@ public class SillonController {
         sillon_eliminado.setMotivo(motivo);
         return sillonEliminadoRepository.save(sillon_eliminado);
 
+    }
+    public void revisarEliminado(Long sillonid){
+        if (sillonRepository.findById(sillonid).get().getActivo()==false) {
+            throw new DeletedException("Ese sillon ya ha sido eliminado");
+        } 
     }
     }
     
