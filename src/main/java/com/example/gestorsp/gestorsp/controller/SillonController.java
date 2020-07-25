@@ -57,10 +57,15 @@ public class SillonController {
     }
     @PostMapping("/sillones")
     public Sillon createSillon(@Validated @RequestBody Sillon sillon_n) {
+        try{
         Date fecha_hora=new Date();
         sillon_n.setFecha_creacion(fecha_hora);
         Sillon newSillon=sillonRepository.save(sillon_n);
         return newSillon;
+        }
+        catch(Exception e){
+            throw new CreateException("Debe incluir el numero de sillon");
+        }
     }
 
     @PutMapping("/sillones/{sillonId}")

@@ -11,6 +11,7 @@ public class Sillon {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(nullable = false)
     private String numero_sillon;
     private boolean activo;
     private Long numero_sala;
