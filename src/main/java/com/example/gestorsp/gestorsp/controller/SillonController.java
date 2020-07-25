@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.NoSuchElementException;
 
 import com.example.gestorsp.gestorsp.exceptions.*;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -42,7 +43,12 @@ public class SillonController {
 
     @GetMapping("/sillones/{sillonId}")
     public Sillon getSillonDetalle(Pageable pageable,@PathVariable Long sillonId){
+            try{
             revisarEliminado(sillonId);
+            }
+            catch(NoSuchElementException e){
+                new ResourceNotFoundException("Sillon not found with id " + sillonId);
+            }
             return sillonRepository.findById(sillonId).map(sillon->{
                 return sillonRepository.save(sillon);
             }).orElseThrow(()-> new ResourceNotFoundException("Sillon not found with id " + sillonId));
