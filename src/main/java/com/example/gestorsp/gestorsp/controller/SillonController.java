@@ -1,5 +1,6 @@
 package com.example.gestorsp.gestorsp.controller;
 
+import com.example.gestorsp.gestorsp.models.Motivo;
 import com.example.gestorsp.gestorsp.models.Sillon;
 import com.example.gestorsp.gestorsp.repository.SillonRepository;
 import com.example.gestorsp.gestorsp.models.SillonEliminado;
@@ -70,7 +71,7 @@ public class SillonController {
 
 
     @DeleteMapping("/sillones/{sillonId}/delete")
-    public Sillon sillonDelete(@PathVariable Long sillonId,@RequestBody String motivo){
+    public Sillon sillonDelete(@PathVariable Long sillonId,@Validated @RequestBody Motivo motivo){
         if (sillonRepository.findById(sillonId).get().getActivo()==false){
             throw new DeletedException("Sillon con la id: "+ sillonId +" ya eliminado");
         }
@@ -80,7 +81,7 @@ public class SillonController {
                 SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd");
                 Date fecha_hora=new Date();
                 sillon.setFecha_retirado(fecha_hora);
-                sillonEliminadoCrear(sillon,motivo);
+                sillonEliminadoCrear(sillon,motivo.getMotivo());
                 return sillonRepository.save(sillon);
             }).orElseThrow(() -> new ResourceNotFoundException("Sillon no encontrado con id: " + sillonId));
     }
