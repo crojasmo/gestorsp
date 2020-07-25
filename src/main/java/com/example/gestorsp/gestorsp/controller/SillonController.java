@@ -42,13 +42,11 @@ public class SillonController {
 
     @GetMapping("/sillones/{sillonId}")
     public Sillon getSillonDetalle(Pageable pageable,@PathVariable Long sillonId){
-        if (sillonRepository.findById(sillonId).get().getActivo()==false) {
-            throw new DeletedException("Sillon con la id: "+ sillonId +" ya eliminado");
-        } 
+        
             return sillonRepository.findById(sillonId).map(sillon->{
                 return sillonRepository.save(sillon);
             }).orElseThrow(()-> new ResourceNotFoundException("Sillon not found with id " + sillonId));
-        
+
         
     }
     @PostMapping("/sillones")
