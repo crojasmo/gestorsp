@@ -45,11 +45,10 @@ public class SillonController {
         if (sillonRepository.findById(sillonId).get().getActivo()==false) {
             throw new DeletedException("Sillon con la id: "+ sillonId +" ya eliminado");
         } 
-        else {
             return sillonRepository.findById(sillonId).map(sillon->{
                 return sillonRepository.save(sillon);
             }).orElseThrow(()-> new ResourceNotFoundException("Sillon not found with id " + sillonId));
-        }
+        
         
     }
     @PostMapping("/sillones")
