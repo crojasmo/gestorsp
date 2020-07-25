@@ -26,4 +26,11 @@ public class SillonEliminadoController {
         return sillonEliminadoRepository.findAll();
     }
 
+    @GetMapping("/silloneseliminados/{sillonId}")
+    public SillonEliminado getSillonDetalle(Pageable pageable,@PathVariable Long sillonId){
+        return sillonEliminadoRepository.findById(sillonId).map(sillon->{
+            return sillonEliminadoRepository.save(sillon);
+        }).orElseThrow(()-> new ResourceNotFoundException("Sillon Eliminado not found with id " + sillonId));
+    }
+
 }
