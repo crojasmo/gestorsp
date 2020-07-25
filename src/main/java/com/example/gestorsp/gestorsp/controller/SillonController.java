@@ -70,7 +70,7 @@ public class SillonController {
 
 
     @DeleteMapping("/sillones/{sillonId}/delete")
-    public Sillon sillonDelete(@PathVariable Long sillonId){
+    public Sillon sillonDelete(@PathVariable Long sillonId,@Validated @RequestBody String motivo){
         if (sillonRepository.findById(sillonId).get().getActivo()==false){
             throw new DeletedException("Sillon con la id: "+ sillonId +" ya eliminado");
         }
@@ -80,17 +80,16 @@ public class SillonController {
                 SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd");
                 Date fecha_hora=new Date();
                 sillon.setFecha_retirado(fecha_hora);
-                sillonEliminadoCrear(sillon);
+                sillonEliminadoCrear(sillon,motivo);
                 return sillonRepository.save(sillon);
             }).orElseThrow(() -> new ResourceNotFoundException("Sillon no encontrado con id: " + sillonId));
     }
-    public SillonEliminado sillonEliminadoCrear(Sillon sillon){
+    public SillonEliminado sillonEliminadoCrear(Sillon sillon,String motivo){
         Long id=sillon.getId();
         String numero_sillon=sillon.getNumero_sillon();
         Date fecha_creacion=sillon.getFecha_creacion();
         SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd");
         Date fecha_eliminacion=new Date();
-        String motivo="";
         SillonEliminado sillon_eliminado= new SillonEliminado();
         sillon_eliminado.setId_original_sillon(id);
         sillon_eliminado.setFecha_creacion(fecha_creacion);
