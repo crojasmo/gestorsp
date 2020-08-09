@@ -97,6 +97,16 @@ public class SillonController {
                 return sillonRepository.save(sillon);
             }).orElseThrow(() -> new ResourceNotFoundException("Sillon no encontrado con id: " + sillonId));
     }
+    @PutMapping("/silloneseliminados/{sillonId}/devolver")
+    public Sillon sillonRecuperar(@PathVariable Long sillonId){
+        return sillonRepository.findById(sillonId)
+        .map(sillon->{
+            sillon.setActivo(true);
+            Date fecha=new Date();
+            sillon.setFecha_update(fecha);
+            return sillonRepository.save(sillon);
+        }).orElseThrow(() -> new ResourceNotFoundException("Sillon no encontrado con id: " + sillonId));
+    }
     public SillonEliminado sillonEliminadoCrear(Sillon sillon,String motivo){
         Long id=sillon.getId();
         String numero_sillon=sillon.getNumero_sillon();
